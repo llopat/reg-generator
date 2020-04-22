@@ -63,13 +63,6 @@ public class Main
             StringBuilder output = new StringBuilder();
             for (String line : template) {
                 scanner = new Scanner(line);
-                //if (scanner.findInLine("AAAA") != null) {
-                //    output.append(line.replaceAll("AAAA", calculateValue(startValueAAAA, startValueAAAALength, i)));
-                //} else if (scanner.findInLine("BBBB") != null) {
-                //    output.append(line.replaceAll("BBBB", calculateValue(startValueBBBB, startValueBBBBLength, i)));
-                //} else {
-                //    output.append(line);
-                //}
                 output.append(
                         line
                             .replaceAll("AAAA", calculateValue(startValueAAAA, startValueAAAALength, i))
