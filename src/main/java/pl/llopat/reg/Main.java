@@ -15,14 +15,15 @@ public class Main
 {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        if (!Arrays.asList(6, 7).contains(args.length)) {
+        if (!Arrays.asList(7, 8).contains(args.length)) {
             String message = "Need to provide 5 arguments:\n" +
                     "\t-path to template file, e.g. d:\\Essex19inchAAAA.reg\n" +
                     "\t-number of copies\n" +
                     "\t-start value for AAAA, e.g. 05\n" +
                     "\t-start value for BBBB, e.g. 0030\n" +
-                    "\t-value for CCCC, e.g. 1111\n" +
-                    "\t-value for DDDD, e.g. 2222\n" +
+                    "\t-value for DDDD, e.g. 1111\n" +
+                    "\t-value for EEEE, e.g. 2222\n" +
+                    "\t-value for GGGG, e.g. 3333\n" +
                     "\t-[Optional] generation delay (in seconds)\n";
             System.out.println(message);
             return;
@@ -38,12 +39,14 @@ public class Main
         int startValueBBBBLength = startValueBBBB.length();
         String constantValueDDDD = args[4];
         String constantValueEEEE = args[5];
+        String constantValueGGGG = args[6];
 
-        System.out.println("Provided values are AAAA:" + startValueAAAA + ", BBBB:" + startValueBBBB + ", DDDD: " + constantValueDDDD + " and EEEE: " + constantValueEEEE);
+        System.out.println(String.format("Provided values are AAAA: %s, BBBB: %s ,DDDD: %s, EEEE: %s and GGGG: %s",
+                                            startValueAAAA, startValueBBBB, constantValueDDDD, constantValueEEEE, constantValueGGGG));
 
         int delayInSeconds = 0;
-        if (args.length == 7) {
-            delayInSeconds = Integer.parseInt(args[4]);
+        if (args.length == 8) {
+            delayInSeconds = Integer.parseInt(args[7]);
             System.out.println("Delay between out files generation: " + delayInSeconds);
         }
 
@@ -66,10 +69,11 @@ public class Main
                 output.append(
                         line
                             .replaceAll("AAAA", calculateValue(startValueAAAA, startValueAAAALength, i))
-                            .replaceAll("BBBB", calculateValue(startValueBBBB, startValueBBBBLength, i))
-                            .replaceAll("CCCC", calculateValue(startValueBBBB, startValueBBBBLength, i, 1))
+                            .replaceAll("BBBB", calculateValue(startValueBBBB, startValueBBBBLength, i * 2))
+                            .replaceAll("CCCC", calculateValue(startValueBBBB, startValueBBBBLength, i * 2, 1))
                             .replaceAll("DDDD", constantValueDDDD)
                             .replaceAll("EEEE", constantValueEEEE)
+                            .replaceAll("GGGG", constantValueGGGG)
                 );
                 output.append(System.getProperty("line.separator"));
             }
@@ -79,16 +83,17 @@ public class Main
         }
     }
 
-    private static String calculateValue(String startValue, int startValueLength, int noOfCopy) {
-        return calculateValue(startValue, startValueLength, noOfCopy, 0);
+    private static String calculateValue(String startValue, int startValueLength, int currentIndex) {
+        return calculateValue(startValue, startValueLength, currentIndex, 0);
     }
 
-    private static String calculateValue(String startValue, int startValueLength, int noOfCopy, int plus) {
-        int currentValue = Integer.parseInt(startValue) + noOfCopy + plus;
-        int currentValueLenght = String.valueOf(currentValue).length();
+    private static String calculateValue(String startValue, int startValueLength, int currentIndex, int plus) {
+        int currentValue = Integer.parseInt(startValue) + currentIndex + plus;
+        int currentValueLength = String.valueOf(currentValue).length();
         StringBuilder value = new StringBuilder();
-        for (int i = 0; i < startValueLength - currentValueLenght; i++)
+        for (int i = 0; i < startValueLength - currentValueLength; i++) {
             value.append("0");
+        }
         value.append(String.valueOf(Integer.valueOf(currentValue)));
         return value.toString();
     }
